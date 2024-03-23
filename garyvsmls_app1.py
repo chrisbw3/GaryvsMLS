@@ -107,7 +107,7 @@ combined_df_selected = combined_df[['Player', 'Team', 'Position', 'SCA90', 'GCA9
 matches_played_selected = df4[['Player', 'MP']]  
 
 combined_df = pd.merge(combined_df_selected, matches_played_selected, on='Player', how='left')
-st.dataframe(combined_df)
+
 selected_metric = st.selectbox("Select Metric:", ['GCA90', 'SCA90'])
 
 
