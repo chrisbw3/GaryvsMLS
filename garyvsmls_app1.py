@@ -55,10 +55,29 @@ st.sidebar.info('''Hey! Want to connect? |  [**LinkedIn**](https://www.linkedin.
 
 st.subheader('Overall Team Stats')
 
+fig2 = px.bar(df1, x='Squad', y='Gls', title='Goals and xG by Club')
+
+# Add line trace for xG
+line_trace = px.line(df1, x='Squad', y='xG').data[0]
+line_trace.line.color = 'red'  # Set line color to red
+
+fig2.add_trace(line_trace)
+
+# Set name for the line trace
+fig2.data[1].name = 'xG'
+
+# Customize the layout
+fig2.update_layout(xaxis_title='', yaxis_title='', legend_title='Metric')
+
+
+st.plotly_chart(fig2)
+
 st.dataframe(df1)
 #########################################################
 
 st.subheader('Overall Player Stats')
+
+st.write("Compare other Eastern Conference teams against the Orange and Blue with two insightful mertrics: **shot & goal creating actions per 90 minutes**. You can also filter by positions.")
 
 col1, col2, col3 = st.columns(3)  # Adjusted to remove the fourth column
 
@@ -88,7 +107,7 @@ combined_df_selected = combined_df[['Player', 'Team', 'Position', 'SCA90', 'GCA9
 matches_played_selected = df4[['Player', 'MP']]  
 
 combined_df = pd.merge(combined_df_selected, matches_played_selected, on='Player', how='left')
-
+st.dataframe(combined_df)
 selected_metric = st.selectbox("Select Metric:", ['GCA90', 'SCA90'])
 
 
