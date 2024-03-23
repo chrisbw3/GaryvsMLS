@@ -33,10 +33,10 @@ st.markdown('''As a long time fan of FCC I felt the passion to blend my love for
         [:orange[fbref.com]](https://fbref.com/en/). ''')
 
 ##load data and create dataframes
-df1 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/season23/season_stats_all_teams23.xlsx")
-df2 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/season23/individual_gsc23.xlsx")
-df3 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/season23/goalkeeper_stats23.xlsx")
-df4 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/season23/individual_player_stats_misc23.xlsx")
+df1 = pd.read_excel("season_stats_all_teams23.xlsx")
+df2 = pd.read_excel("individual_gsc23.xlsx")
+df3 = pd.read_excel("goalkeeper_stats23.xlsx")
+df4 = pd.read_excel("individual_player_stats_misc23.xlsx")
 
 
 df2.drop(columns=['Nation', '90s', 'SCA', 'TO', 'Sh', 'Fld', 'Def', 'GCA','PassLive', 'PassDead', 'Age',
