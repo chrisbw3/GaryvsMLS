@@ -33,10 +33,10 @@ st.markdown('''As a long time fan of FCC I felt the passion to blend my love for
         [:orange[fbref.com]](https://fbref.com/en/). ''')
 
 ##load data and create dataframes
-df1 = pd.read_excel("season_stats_all_teams23.xlsx")
-df2 = pd.read_excel("individual_gsc23.xlsx")
-df3 = pd.read_excel("goalkeeper_stats23.xlsx")
-df4 = pd.read_excel("individual_player_stats_misc23.xlsx")
+df1 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/season_stats_all_teams23.xlsx")
+df2 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/individual_gsc23.xlsx")
+df3 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/goalkeeper_stats23.xlsx")
+df4 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/individual_player_stats_misc23.xlsx")
 
 
 df2.drop(columns=['Nation', '90s', 'SCA', 'TO', 'Sh', 'Fld', 'Def', 'GCA','PassLive', 'PassDead', 'Age',
@@ -45,41 +45,41 @@ df3.drop(columns=['Nation'], axis=1, inplace=True)
 
 df4.drop(columns=['Age', 'Starts', 'Min', '90s', 'Gls', 'Ast', 'G+A', 'G-PK', 'PK', 'PKatt', 'CrdY', 'CrdR', 'xG', 'npxG', 'xAG', 'npxG+xAG', 'PrgC', 'PrgP', 'PrgR', 'Gls', 'Ast', 'G+A', 'G-PK', 'G+A-PK', 'xG', 'xAG', 'xG+xAG', 'npxG', 'npxG+xAG'], axis=1, inplace=True)
 
-###sidebar section
-st.sidebar.header('Parameters')
-selected_year = st.sidebar.selectbox('Season (more seasons coming soon)',options=df2["Season"].unique(),index=0)
+selected_season_df1 = st.selectbox('Season (more seasons coming soon)',options=df1["Season"].unique(),index=0)
+filtered_df1_season = df1[df1['Season'] == selected_season_df1]
 
+###sidebar section
 st.sidebar.info('''Hey! Want to connect? |  [**LinkedIn**](https://www.linkedin.com/in/christian-wl-gentry/)
                   ''')
 
 
 st.subheader('Overall Team Stats')
 
-fig2 = px.bar(df1, x='Squad', y='Gls', title='Goals and xG by Club')
+fig2 = px.bar(filtered_df1_season, x='Squad', y='Gls', title='Goals and xG by Club')
 
-# Add line trace for xG
-line_trace = px.line(df1, x='Squad', y='xG').data[0]
-line_trace.line.color = 'red'  # Set line color to red
+
+line_trace = px.line(filtered_df1_season, x='Squad', y='xG').data[0]
+line_trace.line.color = 'red'
 
 fig2.add_trace(line_trace)
 
-# Set name for the line trace
+
 fig2.data[1].name = 'xG'
 
-# Customize the layout
+
 fig2.update_layout(xaxis_title='', yaxis_title='', legend_title='Metric')
 
 
 st.plotly_chart(fig2)
 
-st.dataframe(df1)
+st.dataframe(filtered_df1_season)
 #########################################################
 
 st.subheader('Overall Player Stats')
 
 st.write("Compare other Eastern Conference teams against the Orange and Blue with two insightful mertrics: **shot & goal creating actions per 90 minutes**. You can also filter by positions.")
 
-col1, col2, col3 = st.columns(3)  # Adjusted to remove the fourth column
+col1, col2, col3 = st.columns(3) 
 
 with col1:
     selected_team_1 = st.selectbox("Home Team (Up the Garys!):", options=[df2["Team"].iloc[0]], index=0)
