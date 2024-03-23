@@ -33,10 +33,10 @@ st.markdown('''As a long time fan of FCC I felt the passion to blend my love for
         [:orange[fbref.com]](https://fbref.com/en/). ''')
 
 ##load data and create dataframes
-df1 = pd.read_excel("season_stats_all_teams23.xlsx")
-df2 = pd.read_excel("individual_gsc23.xlsx")
-df3 = pd.read_excel("goalkeeper_stats23.xlsx")
-df4 = pd.read_excel("individual_player_stats_misc23.xlsx")
+df1 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/season_stats_all_teams23.xlsx")
+df2 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/individual_gsc23.xlsx")
+df3 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/goalkeeper_stats23.xlsx")
+df4 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/individual_player_stats_misc23.xlsx")
 
 
 df2.drop(columns=['Nation', '90s', 'SCA', 'TO', 'Sh', 'Fld', 'Def', 'GCA','PassLive', 'PassDead', 'Age',
@@ -45,14 +45,14 @@ df3.drop(columns=['Nation'], axis=1, inplace=True)
 
 df4.drop(columns=['Age', 'Starts', 'Min', '90s', 'Gls', 'Ast', 'G+A', 'G-PK', 'PK', 'PKatt', 'CrdY', 'CrdR', 'xG', 'npxG', 'xAG', 'npxG+xAG', 'PrgC', 'PrgP', 'PrgR', 'Gls', 'Ast', 'G+A', 'G-PK', 'G+A-PK', 'xG', 'xAG', 'xG+xAG', 'npxG', 'npxG+xAG'], axis=1, inplace=True)
 
-selected_season_df1 = st.selectbox('Season (more seasons coming soon)',options=df1["Season"].unique(),index=0)
-filtered_df1_season = df1[df1['Season'] == selected_season_df1]
+
 
 ###sidebar section
 st.sidebar.info('''Hey! Want to connect? |  [**LinkedIn**](https://www.linkedin.com/in/christian-wl-gentry/)
                   ''')
 
-
+selected_season_df1 = st.selectbox('Season (more seasons coming soon)',options=df1["Season"].unique(),index=0)
+filtered_df1_season = df1[df1['Season'] == selected_season_df1]
 
 st.subheader('Overall Team Stats')
 
@@ -79,6 +79,9 @@ st.dataframe(filtered_df1_season)
 st.subheader('Overall Player Stats')
 
 st.write("Compare other Eastern Conference teams against the Orange and Blue with two insightful mertrics: **shot & goal creating actions per 90 minutes**. You can also filter by positions.")
+
+#selected_season_df2 = st.selectbox('Season (more seasons coming soon)',options=df2["Season"].unique(),index=0)
+#filtered_df2_season = df2[df2['Season'] == selected_season_df2]
 
 col1, col2, col3 = st.columns(3) 
 
@@ -118,7 +121,7 @@ fig.update_traces(marker=dict(size=12,
                                line=dict(width=2,
                                          color='Coral')),
                   selector=dict(mode='markers'))
-
+fig.add_hline(y=combined_df[selected_metric].mean(), line_color="Red")
 st.plotly_chart(fig)
 
 st.dataframe(combined_df)
