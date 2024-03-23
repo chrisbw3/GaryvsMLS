@@ -78,7 +78,7 @@ st.dataframe(filtered_df1_season)
 
 st.subheader('Overall Player Stats')
 
-st.write("Compare other Eastern Conference teams against the Orange and Blue with two insightful mertrics: **shot & goal creating actions per 90 minutes**. You can also filter by positions.")
+st.write("Compare other Eastern Conference teams against the Orange and Blue with two insightful mertrics: **shot & goal creating actions per 90 minutes**. You can also filter by positions, and see if certain players fall above or below the mean.")
 
 #selected_season_df2 = st.selectbox('Season (more seasons coming soon)',options=df2["Season"].unique(),index=0)
 #filtered_df2_season = df2[df2['Season'] == selected_season_df2]
