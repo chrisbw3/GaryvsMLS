@@ -33,10 +33,10 @@ st.markdown('''As a long time fan of FCC I felt the passion to blend my love for
         [:orange[fbref.com]](https://fbref.com/en/). ''')
 
 ##load data and create dataframes
-df1 = pd.read_excel("season_stats_all_teams23.xlsx")
-df2 = pd.read_excel("individual_gsc23.xlsx")
-df3 = pd.read_excel("goalkeeper_stats23.xlsx")
-df4 = pd.read_excel("individual_player_stats_misc23.xlsx")
+df1 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/season_stats_all_teams23.xlsx")
+df2 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/individual_gsc23.xlsx")
+df3 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/goalkeeper_stats23.xlsx")
+df4 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/individual_player_stats_misc23.xlsx")
 
 
 df2.drop(columns=['Nation', '90s', 'SCA', 'TO', 'Sh', 'Fld', 'Def', 'GCA','PassLive', 'PassDead', 'Age',
@@ -53,10 +53,11 @@ st.sidebar.info('''Hey! Want to connect? |  [**LinkedIn**](https://www.linkedin.
                   ''')
 
 
+
 st.subheader('Overall Team Stats')
 
-fig2 = px.bar(filtered_df1_season, x='Squad', y='Gls', title='Goals and xG by Club')
-
+fig2 = px.bar(filtered_df1_season, x='Squad', y='Gls')
+fig2.update_layout(title_text='Goals vs xG by Club', title_x=0.43)
 
 line_trace = px.line(filtered_df1_season, x='Squad', y='xG').data[0]
 line_trace.line.color = 'red'
