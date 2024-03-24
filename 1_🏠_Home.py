@@ -8,6 +8,17 @@ from io import BytesIO
 import plotly.express as px
 from st_pages import Page, show_pages, add_page_title
 
+
+show_pages(
+    [
+        Page("1_🏠_Home.py", "Home", "🏠"),
+        Page("pages/2_🤖_About_page.py", "About", "🤖"),
+        Page("pages/3_⚔️_Head2Head.py", "Head to Head", "⚔️" ),
+        Page("4_🤺_Individual_players.py", "FCC Players", "🤺"),
+        Page("5_🏆_MVP_Comparison", "MVP Analysis", "🏆")
+    ]
+)
+
 squad_logos = {
     'FC Cincinnati': 'https://images.mlssoccer.com/image/upload/t_q-best/v1620997960/assets/logos/CIN-Logo-480px.png',
     'Orlando City': 'https://images.mlssoccer.com/image/upload/t_q-best/v1614970757/assets/logos/6900-orlando-logo_tfcjmq.png',
@@ -32,13 +43,6 @@ st.title('Gary vs MLS: FC Cincinnati in Numbers :soccer:')
 st.markdown(''' ''')
 
 
-show_pages(
-    [
-        Page("1_🏠_Home.py", "Home", "🏠"),
-        Page("pages/2_🤖_About_page.py", "About", "🤖"),
-    ]
-)
-
 ##load data and create dataframes
 df1 = pd.read_excel("season_stats_all_teams23.xlsx")
 df2 = pd.read_excel("individual_gsc23.xlsx")
@@ -54,6 +58,7 @@ df4.drop(columns=['Age', 'Starts', '90s', 'Gls', 'Ast', 'G+A', 'G-PK', 'PK', 'PK
 
 df2['GCA'] = pd.to_numeric(df2['GCA'])
 df2['SCA'] = pd.to_numeric(df2['SCA'])
+
 
 ###sidebar section
 st.sidebar.write(''':orange[Note: Viewing the current season may not yield best results, as some 
@@ -76,6 +81,9 @@ filtered_df1_season = df1[df1['Season'] == selected_season_df1]
 
 fig2 = px.bar(filtered_df1_season, x='Squad', y='Gls')
 fig2.update_layout(title_text='Goals vs xG by Club', title_x=0.43)
+
+colors = ['orange' if squad == 'FC Cincinnati' else 'blue' for squad in filtered_df1_season['Squad']]
+fig2.update_traces(marker_color=colors)
 
 line_trace = px.line(filtered_df1_season, x='Squad', y='xG').data[0]
 line_trace.line.color = 'red'
@@ -162,11 +170,13 @@ size_column = metric_to_size_column[selected_metric]
 
 
 fig = px.scatter(filtered_df2_season, x='Min', y=selected_metric, color='Team', size=size_column, hover_data=['Player', 'Position'])
+
 fig.update_traces(marker=dict(
                                line=dict(width=2,
                                          color='Coral')),
                   selector=dict(mode='markers'))
 fig.add_hline(y=combined_df[selected_metric].mean(), line_color="Red")
+
 st.plotly_chart(fig, use_container_width=True)
 st.dataframe(filtered_df2_season, hide_index=True)
 
@@ -189,17 +199,19 @@ st.header('Overall Goalkeeper Stats')
 
 filtered_df3_season = df3[df3['Season'] == selected_season_df1]
 
+
+st.write('''Compare the save percentage over shots on target against, 
+         where marker sizes are based on minutes played.''')
+fig3 = px.scatter(filtered_df3_season, x='SoTA', y='Save%', color='Player', size='Minutes', hover_data=['Player', 'Team'])
+fig3.add_hline(y=filtered_df3_season['Save%'].mean(), line_dash="dash", line_color="Red")
+st.plotly_chart(fig3, use_container_width=True)
+
 st.write('''***Post-shot expected goals - goals aginst*** is an intriguing look at a keeper's ability
          to stop shots based on shot-stopping probability, which includes penalty kicks
          but not penalty shootouts.''')
 fig4 = px.bar(filtered_df3_season, x='Player', y='PSxG+/-', color='PSxG+/-', hover_data=['Team'])
 st.plotly_chart(fig4, use_container_width=True)
 
-st.write('''Compare the save percentage over shots on target against (and if the GK falls above/below the mean save percentage), 
-         where marker sizes are based on minutes played.''')
-fig3 = px.scatter(filtered_df3_season, x='SoTA', y='Save%', color='Player', size='Minutes', hover_data=['Player', 'Team'])
-fig3.add_hline(y=filtered_df3_season['Save%'].mean(), line_dash="dash", line_color="Red")
-st.plotly_chart(fig3, use_container_width=True)
 
 st.dataframe(filtered_df3_season, hide_index=True)
 def convert_df2(filtered_df3_season):
