@@ -34,16 +34,16 @@ st.markdown(''' ''')
 
 show_pages(
     [
-        Page("1_🏠_Home.py", "Home", "🏠"),
-        Page("pages/2_🤖_About_page.py", "About", "🤖"),
+        Page("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/1_🏠_Home.py", "Home", "🏠"),
+        Page("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/pages/2_🤖_About_page.py", "About", "🤖"),
     ]
 )
 
 ##load data and create dataframes
-df1 = pd.read_excel("season_stats_all_teams23.xlsx")
-df2 = pd.read_excel("individual_gsc23.xlsx")
-df3 = pd.read_excel("goalkeeper_stats23.xlsx")
-df4 = pd.read_excel("individual_player_stats_misc23.xlsx")
+df1 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/season_stats_all_teams23.xlsx")
+df2 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/individual_gsc23.xlsx")
+df3 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/goalkeeper_stats23.xlsx")
+df4 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/individual_player_stats_misc23.xlsx")
 
 
 df2.drop(columns=['Nation', '90s', 'TO', 'Sh', 'Fld', 'Def', 'PassLive', 'PassDead', 'Age',
@@ -160,6 +160,7 @@ metric_to_size_column = {'GCA90': 'GCA', 'SCA90': 'SCA'}
 
 size_column = metric_to_size_column[selected_metric]
 
+
 fig = px.scatter(filtered_df2_season, x='Min', y=selected_metric, color='Team', size=size_column, hover_data=['Player', 'Position'])
 fig.update_traces(marker=dict(
                                line=dict(width=2,
@@ -167,7 +168,6 @@ fig.update_traces(marker=dict(
                   selector=dict(mode='markers'))
 fig.add_hline(y=combined_df[selected_metric].mean(), line_color="Red")
 st.plotly_chart(fig, use_container_width=True)
-
 st.dataframe(filtered_df2_season, hide_index=True)
 
 def convert_df2(filtered_df2_season):
@@ -183,9 +183,36 @@ st.download_button(
    key='download2-csv'
 )
 #################################
+#fig3 = px.density_heatmap(df3, x='PKatt', y='PKA', nbinsx=20, nbinsy=20, text_auto=True)
+
 st.subheader('Overall Goalkeeper Stats')
 
-#fig3 = px.density_heatmap(df3, x='PKatt', y='PKA', nbinsx=20, nbinsy=20, text_auto=True)
-#st.plotly_chart(fig3)
+filtered_df3_season = df3[df3['Season'] == selected_season_df1]
 
-st.dataframe(df3)
+col1, col2 = st.columns(2)
+
+with col1:
+    fig3 = px.scatter(filtered_df3_season, x='SoTA', y='Save%', color='Player', size='Minutes', hover_data=['Player', 'Team'])
+    fig3.add_hline(y=filtered_df3_season['Save%'].mean(), line_dash="dash", line_color="Red")
+    st.plotly_chart(fig3, use_container_width=True)
+with col2:
+    fig4 = px.bar(filtered_df3_season, x='Player', y='PSxG+/-', color='PSxG+/-')
+   # line_trace = px.line(filtered_df3_season, x='Player', y='CS').data[0]
+    #line_trace.line.color = 'red'
+    #fig4.add_trace(line_trace)  
+    st.plotly_chart(fig4, use_container_width=True)
+
+
+st.dataframe(filtered_df3_season, hide_index=True)
+def convert_df2(filtered_df3_season):
+   return filtered_df3_season.to_csv(index=False).encode('utf-8')
+
+csv = convert_df2(filtered_df3_season)
+
+st.download_button(
+   "Download CSV",
+   csv,
+   "file.csv",
+   "text/csv",
+   key='download3-csv'
+)
