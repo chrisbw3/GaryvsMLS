@@ -108,7 +108,7 @@ st.download_button(
 )
 #########################################################
 
-st.subheader('Overall Player Stats')
+st.subheader('Player Offensive Productivity Stats')
 
 st.write('''Compare other Eastern Conference teams against the Orange and Blue with two insightful mertrics: 
          **shot & goal creating actions per 90 minutes**. You can also filter by positions, and
