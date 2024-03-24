@@ -6,6 +6,7 @@ import requests
 from PIL import Image
 from io import BytesIO
 import plotly.express as px
+from st_pages import Page, show_pages, add_page_title
 
 squad_logos = {
     'FC Cincinnati': 'https://images.mlssoccer.com/image/upload/t_q-best/v1620997960/assets/logos/CIN-Logo-480px.png',
@@ -26,11 +27,17 @@ squad_logos = {
 }
 
 ###initial config
-st.set_page_config(page_icon=':soccer:', layout="centered")
+st.set_page_config(page_icon=':soccer:', layout="wide")
 st.title('Gary vs MLS: FC Cincinnati in Numbers :soccer:')
-st.markdown('''As a long time fan of FCC I felt the passion to blend my love for the club 
-         with my ambitions working with data. Stats are compiled from
-        [:orange[fbref.com]](https://fbref.com/en/). ''')
+st.markdown(''' ''')
+
+
+show_pages(
+    [
+        Page("garyvsmls_app1.py", "Home", "🏠"),
+        Page("pages/2_🤖_About_page.py", "About", "🤖"),
+    ]
+)
 
 ##load data and create dataframes
 df1 = pd.read_excel("season_stats_all_teams23.xlsx")
@@ -39,22 +46,33 @@ df3 = pd.read_excel("goalkeeper_stats23.xlsx")
 df4 = pd.read_excel("individual_player_stats_misc23.xlsx")
 
 
-df2.drop(columns=['Nation', '90s', 'SCA', 'TO', 'Sh', 'Fld', 'Def', 'GCA','PassLive', 'PassDead', 'Age',
+df2.drop(columns=['Nation', '90s', 'TO', 'Sh', 'Fld', 'Def', 'PassLive', 'PassDead', 'Age',
                   'PassLive.1', 'PassDead.1', 'TO.1', 'Sh.1', 'Fld.1', 'Def.1'], axis=1, inplace=True)
 df3.drop(columns=['Nation'], axis=1, inplace=True)
 
-df4.drop(columns=['Age', 'Starts', 'Min', '90s', 'Gls', 'Ast', 'G+A', 'G-PK', 'PK', 'PKatt', 'CrdY', 'CrdR', 'xG', 'npxG', 'xAG', 'npxG+xAG', 'PrgC', 'PrgP', 'PrgR', 'Gls', 'Ast', 'G+A', 'G-PK', 'G+A-PK', 'xG', 'xAG', 'xG+xAG', 'npxG', 'npxG+xAG'], axis=1, inplace=True)
+df4.drop(columns=['Age', 'Starts', '90s', 'Gls', 'Ast', 'G+A', 'G-PK', 'PK', 'PKatt', 'CrdY', 'CrdR', 'xG', 'npxG', 'xAG', 'npxG+xAG', 'PrgC', 'PrgP', 'PrgR', 'Gls', 'Ast', 'G+A', 'G-PK', 'G+A-PK', 'xG', 'xAG', 'xG+xAG', 'npxG', 'npxG+xAG'], axis=1, inplace=True)
 
-
+df2['GCA'] = pd.to_numeric(df2['GCA'])
+df2['SCA'] = pd.to_numeric(df2['SCA'])
 
 ###sidebar section
-st.sidebar.info('''Hey! Want to connect? |  [**LinkedIn**](https://www.linkedin.com/in/christian-wl-gentry/)
-                  ''')
+st.sidebar.write(''':orange[Note: Viewing the current season may not yield best results, as some 
+                 stats have not been entered into the database or are missing.]
+                 ''')
+selected_season_df1 = st.sidebar.selectbox('Season (more seasons coming soon)',options=df1["Season"].unique(),index=0)
 
-selected_season_df1 = st.selectbox('Season (more seasons coming soon)',options=df1["Season"].unique(),index=0)
-filtered_df1_season = df1[df1['Season'] == selected_season_df1]
+st.sidebar.subheader('''''')
+
+st.sidebar.info('''Hey! Want to connect? |  [**LinkedIn**](https://www.linkedin.com/in/christian-wl-gentry/)
+                | [**Twitter**](https://twitter.com/_chocolatejuice?s=11)''')
+#########################
+
 
 st.subheader('Overall Team Stats')
+
+st.write('''Compare season-by-season how FCC stacks up with the rest of the east in goals/xg. Use the season selector on the sidebar.''')
+
+filtered_df1_season = df1[df1['Season'] == selected_season_df1]
 
 fig2 = px.bar(filtered_df1_season, x='Squad', y='Gls')
 fig2.update_layout(title_text='Goals vs xG by Club', title_x=0.43)
@@ -71,17 +89,31 @@ fig2.data[1].name = 'xG'
 fig2.update_layout(xaxis_title='', yaxis_title='', legend_title='Metric')
 
 
-st.plotly_chart(fig2)
+st.plotly_chart(fig2, use_container_width=True)
 
-st.dataframe(filtered_df1_season)
+st.dataframe(filtered_df1_season, hide_index=True)
+
+def convert_df(filtered_df1_season):
+   return filtered_df1_season.to_csv(index=False).encode('utf-8')
+
+
+csv = convert_df(filtered_df1_season)
+
+st.download_button(
+   "Download CSV",
+   csv,
+   "file.csv",
+   "text/csv",
+   key='download-csv'
+)
 #########################################################
 
 st.subheader('Overall Player Stats')
 
-st.write("Compare other Eastern Conference teams against the Orange and Blue with two insightful mertrics: **shot & goal creating actions per 90 minutes**. You can also filter by positions, and see if certain players fall above or below the mean.")
+st.write('''Compare other Eastern Conference teams against the Orange and Blue with two insightful mertrics: 
+         **shot & goal creating actions per 90 minutes**. You can also filter by positions, and
+         see if they are above/below the mean.''')
 
-#selected_season_df2 = st.selectbox('Season (more seasons coming soon)',options=df2["Season"].unique(),index=0)
-#filtered_df2_season = df2[df2['Season'] == selected_season_df2]
 
 col1, col2, col3 = st.columns(3) 
 
@@ -107,24 +139,53 @@ df2_selection_team_2 = filtered_df2_team_2[(filtered_df2_team_2['Position'].isin
 
 combined_df = pd.concat([df2_selection_team_1, df2_selection_team_2])
 
-combined_df_selected = combined_df[['Player', 'Team', 'Position', 'SCA90', 'GCA90', 'Season']] 
-matches_played_selected = df4[['Player', 'MP']]  
+combined_df_selected = combined_df[['Player', 'Team', 'Position', 'SCA', 'SCA90', 'GCA', 'GCA90', 'Season']] 
+matches_played_selected = df4[['Player', 'Min']]  
 
 combined_df = pd.merge(combined_df_selected, matches_played_selected, on='Player', how='left')
 
-selected_metric = st.selectbox("Select Metric:", ['GCA90', 'SCA90'])
+col1, col2 = st.columns(2)
+with col1:
+    st.write('**What is GCA and SCA?**')
+    st.write('''Per [:orange[fbref.com]](https://fbref.com/en/), goal/shot creating actions
+              are two offensive actions directly leading to goals/shots, such as: passes, 
+             take-ons, and drawing fouls. Size of markers is based on how many total goal/
+             shot creating actions each player had for the entire selected season.''')
+with col2:
+    selected_metric = st.selectbox("Select Metric:", ['GCA90', 'SCA90'])
 
+filtered_df2_season = combined_df[combined_df['Season'] == selected_season_df1]
 
+metric_to_size_column = {'GCA90': 'GCA', 'SCA90': 'SCA'}
 
-fig = px.scatter(combined_df, x='MP', y=selected_metric, color='Team', hover_data=['Player', 'Position'])
-fig.update_traces(marker=dict(size=12,
+size_column = metric_to_size_column[selected_metric]
+
+fig = px.scatter(filtered_df2_season, x='Min', y=selected_metric, color='Team', size=size_column, hover_data=['Player', 'Position'])
+fig.update_traces(marker=dict(
                                line=dict(width=2,
                                          color='Coral')),
                   selector=dict(mode='markers'))
 fig.add_hline(y=combined_df[selected_metric].mean(), line_color="Red")
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 
-st.dataframe(combined_df)
+st.dataframe(filtered_df2_season, hide_index=True)
 
+def convert_df2(filtered_df2_season):
+   return filtered_df2_season.to_csv(index=False).encode('utf-8')
+
+csv = convert_df2(filtered_df2_season)
+
+st.download_button(
+   "Download CSV",
+   csv,
+   "file.csv",
+   "text/csv",
+   key='download2-csv'
+)
+#################################
 st.subheader('Overall Goalkeeper Stats')
+
+#fig3 = px.density_heatmap(df3, x='PKatt', y='PKA', nbinsx=20, nbinsy=20, text_auto=True)
+#st.plotly_chart(fig3)
+
 st.dataframe(df3)
