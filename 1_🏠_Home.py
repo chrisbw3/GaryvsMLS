@@ -197,7 +197,7 @@ st.plotly_chart(fig4, use_container_width=True)
 
 st.write('''Compare the save percentage over shots on target against, 
          where marker sizes are based on minutes played.''')
-fig3 = px.scatter(filtered_df3_season, x='SoTA', y='Save%', color='Player', size='CS', hover_data=['Player', 'Team'])
+fig3 = px.scatter(filtered_df3_season, x='SoTA', y='Save%', color='Player', size='Minutes', hover_data=['Player', 'Team'])
 fig3.add_hline(y=filtered_df3_season['Save%'].mean(), line_dash="dash", line_color="Red")
 st.plotly_chart(fig3, use_container_width=True)
 
