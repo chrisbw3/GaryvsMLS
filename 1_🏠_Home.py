@@ -195,7 +195,7 @@ st.write('''***Post-shot expected goals - goals aginst*** is an intriguing look 
 fig4 = px.bar(filtered_df3_season, x='Player', y='PSxG+/-', color='PSxG+/-', hover_data=['Team'])
 st.plotly_chart(fig4, use_container_width=True)
 
-st.write('''Compare the save percentage over shots on target against, 
+st.write('''Compare the save percentage over shots on target against (and if the GK falls above/below the mean save percentage), 
          where marker sizes are based on minutes played.''')
 fig3 = px.scatter(filtered_df3_season, x='SoTA', y='Save%', color='Player', size='Minutes', hover_data=['Player', 'Team'])
 fig3.add_hline(y=filtered_df3_season['Save%'].mean(), line_dash="dash", line_color="Red")
