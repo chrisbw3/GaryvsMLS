@@ -17,7 +17,7 @@ st.sidebar.info('''Hey! Want to connect? |  [**LinkedIn**](https://www.linkedin.
 col1, col2 = st.columns(2)
 
 with col1:
-    st.image('/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/IMG_0050.JPG', caption='Meeting my FCC hero, Emmanuel Ledesma')
+    st.image('IMG_0050.JPG', caption='Meeting my FCC hero, Emmanuel Ledesma')
 
 with col2:
     st.write('''I went to my first FCC game in 2017, during the last visit from the Rochester Rhinos.
