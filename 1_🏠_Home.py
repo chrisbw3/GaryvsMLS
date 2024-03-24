@@ -34,16 +34,16 @@ st.markdown(''' ''')
 
 show_pages(
     [
-        Page("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/1_🏠_Home.py", "Home", "🏠"),
-        Page("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/pages/2_🤖_About_page.py", "About", "🤖"),
+        Page("garyvsmls/1_🏠_Home.py", "Home", "🏠"),
+        Page("pages/2_🤖_About_page.py", "About", "🤖"),
     ]
 )
 
 ##load data and create dataframes
-df1 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/season_stats_all_teams23.xlsx")
-df2 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/individual_gsc23.xlsx")
-df3 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/goalkeeper_stats23.xlsx")
-df4 = pd.read_excel("/Users/christiangentry/Documents/Data_projects/fcc_project/garyvsmls/data/individual_player_stats_misc23.xlsx")
+df1 = pd.read_excel("season_stats_all_teams23.xlsx")
+df2 = pd.read_excel("individual_gsc23.xlsx")
+df3 = pd.read_excel("goalkeeper_stats23.xlsx")
+df4 = pd.read_excel("individual_player_stats_misc23.xlsx")
 
 
 df2.drop(columns=['Nation', '90s', 'TO', 'Sh', 'Fld', 'Def', 'PassLive', 'PassDead', 'Age',
