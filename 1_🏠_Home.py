@@ -14,8 +14,8 @@ show_pages(
         Page("1_🏠_Home.py", "Home", "🏠"),
         Page("pages/2_🤖_About_page.py", "About", "🤖"),
         Page("pages/3_⚔️_Head2Head.py", "Head to Head", "⚔️" ),
-        Page("4_🤺_Individual_players.py", "FCC Players", "🤺"),
-        Page("5_🏆_MVP_Comparison", "MVP Analysis", "🏆")
+        Page("pages/4_🤺_Individual_players.py", "FCC Players", "🤺"),
+        Page("pages/5_🏆_MVP_Comparison", "MVP Analysis", "🏆")
     ]
 )
 
