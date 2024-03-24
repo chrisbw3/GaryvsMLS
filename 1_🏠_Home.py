@@ -185,22 +185,22 @@ st.download_button(
 #################################
 #fig3 = px.density_heatmap(df3, x='PKatt', y='PKA', nbinsx=20, nbinsy=20, text_auto=True)
 
-st.subheader('Overall Goalkeeper Stats')
+st.header('Overall Goalkeeper Stats')
 
 filtered_df3_season = df3[df3['Season'] == selected_season_df1]
 
-col1, col2 = st.columns(2)
 
-with col1:
-    fig3 = px.scatter(filtered_df3_season, x='SoTA', y='Save%', color='Player', size='Minutes', hover_data=['Player', 'Team'])
-    fig3.add_hline(y=filtered_df3_season['Save%'].mean(), line_dash="dash", line_color="Red")
-    st.plotly_chart(fig3, use_container_width=True)
-with col2:
-    fig4 = px.bar(filtered_df3_season, x='Player', y='PSxG+/-', color='PSxG+/-')
-   # line_trace = px.line(filtered_df3_season, x='Player', y='CS').data[0]
-    #line_trace.line.color = 'red'
-    #fig4.add_trace(line_trace)  
-    st.plotly_chart(fig4, use_container_width=True)
+st.write('''Compare the save percentage over shots on target against, 
+         where marker sizes are based on minutes played.''')
+fig3 = px.scatter(filtered_df3_season, x='SoTA', y='Save%', color='Player', size='CS', hover_data=['Player', 'Team'])
+fig3.add_hline(y=filtered_df3_season['Save%'].mean(), line_dash="dash", line_color="Red")
+st.plotly_chart(fig3, use_container_width=True)
+
+st.write('''***Post-shot expected goals - goals aginst*** is an intriguing look at a keeper's ability
+         to stop shots based on shot-stopping probability, which includes penalty kicks
+         but not penalty shootouts.''')
+fig4 = px.bar(filtered_df3_season, x='Player', y='PSxG+/-', color='PSxG+/-', hover_data=['Team'])
+st.plotly_chart(fig4, use_container_width=True)
 
 
 st.dataframe(filtered_df3_season, hide_index=True)
