@@ -34,7 +34,7 @@ st.markdown(''' ''')
 
 show_pages(
     [
-        Page("garyvsmls/1_🏠_Home.py", "Home", "🏠"),
+        Page("1_🏠_Home.py", "Home", "🏠"),
         Page("pages/2_🤖_About_page.py", "About", "🤖"),
     ]
 )
