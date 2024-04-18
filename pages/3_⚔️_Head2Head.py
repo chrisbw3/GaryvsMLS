@@ -34,7 +34,7 @@ with col1:
     selected_team_1 = st.selectbox("Select Team (Up the Gary's!)", options=[df1["Team"].iloc[0]], index=0)
 
 with col2:
-    selected_team_2 = st.selectbox("Opponent:", options=df1["Opponent"].unique(), index=2)
+    selected_team_2 = st.selectbox("Opponent:", options=df1["Opponent"].unique(), index=3)
 
 
     
